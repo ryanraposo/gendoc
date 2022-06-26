@@ -1,6 +1,9 @@
 import inquirer from 'inquirer';
 
 
+import { generateReadme } from './src/readme-template.js';
+
+
 const prompt = () => {
     return inquirer
         .prompt([
@@ -125,3 +128,8 @@ const prompt = () => {
             },
         ]);
 };
+
+prompt()
+    .then(readmeData => {
+        return generateReadme(readmeData);
+    });
