@@ -1,5 +1,5 @@
 const generateLicenseBadge = license => {
-    switch(license){
+    switch(license[0]){
         case "Apache License 2.0":
             return "[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)"
         case "GNU General Public License v3.0":
@@ -10,12 +10,14 @@ const generateLicenseBadge = license => {
 };
 
 const generateReadme = readmeData => {
-    const { title, description, installation, usage, contributing, tests, license, username, email } = templateData;
+    const { title, description, installation, usage, contributing, tests, license, username, email } = readmeData;
 
+    const licenseBadge = generateLicenseBadge(license);
+    
     return `
 # ${title}
 
-${generateLicenseBadge(license)}
+${licenseBadge}
 
 - [${title}](#${title})
 - [Description](#description)
@@ -47,9 +49,9 @@ ${tests}
 
 ## Questions
 
-GitHub: ${username}
+GitHub: [github.com/${username}](https://github.com/${username})
 
-Comments, critiques, questions? Contact me at: ${email}
+Comments, critiques, questions? Contact me at: [${email}](mailto:${email})
     `;
 };
 

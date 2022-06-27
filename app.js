@@ -2,6 +2,7 @@ import inquirer from 'inquirer';
 
 
 import { generateReadme } from './src/readme-template.js';
+import { writeFile } from './utils/generate-readme.js';
 
 
 const prompt = () => {
@@ -53,7 +54,7 @@ const prompt = () => {
                 // usage
                 type: 'input',
                 name: 'usage',
-                message: 'How is the project used?',
+                message: 'How is the project used? (Required)',
                 validate: usageInput => {
                     if (usageInput) {
                         return true;
@@ -67,7 +68,7 @@ const prompt = () => {
                 // contributing
                 type: 'input',
                 name: 'contributing',
-                message: 'How can someone contribute to the project?',
+                message: 'How can someone contribute to the project? (Required)',
                 validate: contributingInput => {
                     if (contributingInput) {
                         return true;
@@ -81,7 +82,7 @@ const prompt = () => {
                 // tests
                 type: 'input',
                 name: 'tests',
-                message: 'How can someone test the project?',
+                message: 'How can someone test the project? (Required)',
                 validate: testsInput => {
                     if (testsInput) {
                         return true;
@@ -96,13 +97,21 @@ const prompt = () => {
                 type: 'checkbox',
                 name: 'license',
                 message: 'Select a license:',
-                choices: ['Apache License 2.0', 'GNU General Public License v3.0', 'MIT License']
+                choices: ['Apache License 2.0', 'GNU General Public License v3.0', 'MIT License'],
+                validate: licenseInput => {
+                    if (licenseInput) {
+                        return true;
+                    } else {
+                        console.log('Please select a license!');
+                        return false;
+                    }
+                }
             },
             {
                 // username
                 type: 'input',
                 name: 'username',
-                message: 'What is your GitHub username?',
+                message: 'What is your GitHub username? (Required)',
                 validate: usernameInput => {
                     if (usernameInput) {
                         return true;
@@ -116,7 +125,7 @@ const prompt = () => {
                 // email
                 type: 'input',
                 name: 'email',
-                message: 'What is your email address?',
+                message: 'What is your email address? (Required)',
                 validate: emailInput => {
                     if (emailInput) {
                         return true;
@@ -132,4 +141,13 @@ const prompt = () => {
 prompt()
     .then(readmeData => {
         return generateReadme(readmeData);
+    })
+    .then(readmeMD => {
+        return writeFile(readmeMD);
+    })
+    .then(writeFileResponse => {
+        console.log(writeFileResponse);
+    })
+    .catch(err => {
+        console.log(err);
     });
